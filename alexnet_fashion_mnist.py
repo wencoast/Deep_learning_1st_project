@@ -9,12 +9,10 @@ Project: https://github.com/aymericdamien/TensorFlow-Examples/
 
 
 from tensorflow.examples.tutorials.mnist import input_data
-#mnist_fashion = input_data.read_data_sets('data/fashion',source_url='http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/')
 mnist_fashion = input_data.read_data_sets('data/fashion', one_hot=True)
 
 import tensorflow as tf
-import numpy as np
-import matplotlib.pyplot as plt
+
 
 
 # Parameters
