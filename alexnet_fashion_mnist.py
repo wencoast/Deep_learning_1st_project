@@ -1,13 +1,3 @@
-'''
-AlexNet implementation example using TensorFlow library.
-This example is using the mnist database of handwritten digits (http://yann.lecun.com/exdb/mnist/)
-AlexNet Paper (http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)
-
-Author: Aymeric Damien
-Project: https://github.com/aymericdamien/TensorFlow-Examples/
-'''
-
-
 from tensorflow.examples.tutorials.mnist import input_data
 mnist_fashion = input_data.read_data_sets('data/fashion', one_hot=True)
 
