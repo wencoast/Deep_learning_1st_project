@@ -20,7 +20,7 @@ AlexNet and ResNet performance comparison
   <li>Using batch normalization.[Part!]</li>
   <li>Using different activation functions including elu, relu, relu6, crelu, prelu, leaky_relu, Sigmoid. [Part!] </li>
   <li>Using data augmentation.[Part!]</li>
-  <li>Using different optimizers such as Adam, SGD, SGD with momentum, MOM, ADAGRAD. [Part!]</li>
+  <li>Using different optimizers such as Adam[None!], SGD, SGD with momentum, MOM[None!], ADAGRAD. [Part!]</li>
   <li>Using pre-trained networks.[None!]</li>
 
 </ol>
