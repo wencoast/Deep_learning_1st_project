@@ -18,7 +18,7 @@ AlexNet and ResNet performance comparison
   <li>Comparison of Deep architectures AlexNet and ResNet.[Done!]</li>
   <li>Using dropout.[Done!]</li>
   <li>Using batch normalization.[Part!]</li>
-  <li>Using different activation functions including elu, relu, relu6, leaky_relu, Sigmoid. [Part!] </li>
+  <li>Using different activation functions including elu, relu, relu6, leaky_relu, Sigmoid. [Done!] </li>
   <li>Using data augmentation.[Part!]</li>
   <li>Using different optimizers such as Adam[None!], SGD, SGD with momentum, MOM[None!], ADAGRAD. [Part!]</li>
   <li>Using pre-trained networks.[None!]</li>
