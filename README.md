@@ -7,7 +7,7 @@ AlexNet and ResNet performance comparison
   
   <li>python 3.6.7</li>
   <li>Tensorflow 1.12.0</li>
-  <li>keras 2.0.5</li>
+  <li>keras 2.1.6-tf</li>
 
 </ul>
 
