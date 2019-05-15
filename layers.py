@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 def conv_layer(x, filter_height, filter_width,
-	num_filters, name, stride = 1, padding = 'SAME',activation_function='relu'):
+	num_filters, name, stride = 1, padding = 'SAME',activation_function='relu',is_batch_normalization='True'):
 
 	"""Create a convolution layer."""
 	
@@ -22,9 +22,15 @@ def conv_layer(x, filter_height, filter_width,
 		z = tf.nn.bias_add(conv, b)
 
 		# Perform batch normalization
-		batch_norm = tf.layers.batch_normalization(z, axis = 1, beta_initializer = tf.constant_initializer(0.0),
+		if is_batch_normalization=='True':
+			batch_norm = tf.layers.batch_normalization(z, axis = 1, beta_initializer = tf.constant_initializer(0.0),
 			gamma_initializer = tf.random_normal_initializer(mean = 0.0, stddev = 0.01))
-
+			print('This is already excuted batch_normalization.')
+			return batch_norm
+		else:
+			print('This is a network model without batch_normlization.')
+			batch_norm=z
+		# choose different activation function
 		if activation_function=='relu':
 			print('which kind of activation function it is', activation_function)
 			relu_out = tf.nn.relu(batch_norm)
@@ -50,51 +56,6 @@ def conv_layer(x, filter_height, filter_width,
 		else:
 			print('\n Keep linear output without using non-linear activation function')
 			return batch_norm
-		#elif activation_function==''
-		# if args.batch_normalization = True:
-
-		# batch_norm = tf.layers.batch_normalization(z, axis = 1, beta_initializer = tf.constant_initializer(0.0),
-		#	gamma_initializer = tf.random_normal_initializer(mean = 0.0, stddev = 0.01))
-
-		# Apply ReLu non linearity.
-
-		# print('This is already excuted batch_normalization.')
-
-		'''
-		else:
-
-		print('This is a network model without batch_normlization.')
-
-		if relu:
-			# Apply ReLu non linearity.
-			a = tf.nn.relu(z)
-			return a
-		elif elu:
-			# input: must be a tensor.  Must be one of the following types: half, bfloat16, float32, float64.
-			# Computes exponential linear: exp(z)-1 if i<0, z otherwise
-			# See Fast and accurate Deep Network Learning by Exponential linear Units(ELUs)
-			c = tf.nn.elu(z)
-			return c
-		elif crelu:
-			# Computes Concatenate ReLU
-			# Concatenates a ReLU which selects only the positive part of the activation with
-			# a ReLU which selects only the negative part of the activation.
-			# Note that as a result this non-linearity doubles the depth of the activations.
-			# axis The axis that the output values are concatenated along. Default is -1.
-			d= tf.nn.crelu(z,axis=-1,name=None)
-			return d
-		
-		elif selu:
-			# Computes scaled exponential linear: scale * alpha * (exp(features) - 1)
-			# if < 0, scale * features otherwise.
-			# To be used together with initializer = tf.variance_scaling_initializer(factor=1.0, mode='FAN_IN').
-			# For correct dropout, use tf.contrib.nn.alpha_dropout.
-			f= tf.nn.selu(z,name=None)
-			return f
-		else:
-			return z
-		'''
-
 
 
 def max_pool(x, name, filter_height = 2, filter_width = 2,
@@ -136,36 +97,3 @@ def fc_layer(x, input_size, output_size, name, relu = True):
 			return a
 		else:
 			return z
-		'''
-		elif leaky_relu:
-			# Apply Leaky ReLU activation function.
-			# alpha represents the slope of the activation function at x<0.
-			# Returns the activation value.
-			b = tf.nn.leaky_relu(z,alpha=0.2,name=None)
-			return b
-		elif elu:
-			# input: must be a tensor.  Must be one of the following types: half, bfloat16, float32, float64.
-			# Computes exponential linear: exp(z)-1 if i<0, z otherwise
-			# See Fast and accurate Deep Network Learning by Exponential linear Units(ELUs)
-			c = tf.nn.elu(z)
-			return c
-		elif crelu:
-			# Computes Concatenate ReLU
-			# Concatenates a ReLU which selects only the positive part of the activation with
-			# a ReLU which selects only the negative part of the activation.
-			# Note that as a result this non-linearity doubles the depth of the activations.
-			# axis The axis that the output values are concatenated along. Default is -1.
-			d= tf.nn.crelu(z,axis=-1,name=None)
-			return d
-		elif relu6:
-			# Computes Rectified Linear 6: min(max(z, 0), 6)
-			e= tf.nn.relu6(z,name=None)
-			return e
-		elif selu:
-			# Computes scaled exponential linear: scale * alpha * (exp(features) - 1)
-			# if < 0, scale * features otherwise.
-			# To be used together with initializer = tf.variance_scaling_initializer(factor=1.0, mode='FAN_IN').
-			# For correct dropout, use tf.contrib.nn.alpha_dropout.
-			f= tf.nn.selu(z,name=None)
-			return f
-		'''
