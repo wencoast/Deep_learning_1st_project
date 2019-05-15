@@ -1,12 +1,12 @@
 from tensorflow.examples.tutorials.mnist import input_data
-mnist_fashion = input_data.read_data_sets('data/fashion', one_hot=True)
+mnist_fashion = input_data.read_data_sets('../data/fashion', one_hot=True)
 
 import tensorflow as tf
 
 
 
 # Parameters
-learning_rate = 0.001
+learning_rate = 0.000001#0.001
 training_iters = 200000
 batch_size = 64
 display_step = 20
@@ -29,7 +29,9 @@ def max_pool(name, l_input, k):
     return tf.nn.max_pool(l_input, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME', name=name)
 
 def norm(name, l_input, lsize=4):
-    return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)
+    #return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)	#local response normalization
+    return tf.layers.batch_normalization(l_input, name=name)	#batch normalization
+    #return l_input	#without normalization
 
 def alex_net(_X, _weights, _biases, _dropout):
     # Reshape input picture
@@ -95,7 +97,8 @@ pred = alex_net(x, weights, biases, keep_prob)
 
 # Define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+#optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=0.9).minimize(cost)
 
 # Evaluate model
 correct_pred = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
