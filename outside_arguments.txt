@@ -1,0 +1,1 @@
+python mnist_resnet.py --dropout_keep_prob 1 --learning_rate 0.01 --max_epochs 10 --batch_size 128 --activation_function relu --data_augmention False --optimizer ADAM --is_batch_normalization False

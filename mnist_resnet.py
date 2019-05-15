@@ -12,29 +12,31 @@ import matplotlib.pyplot as plt
 
 import argparse
 
-"""parsing and configuration"""
+"""parsing and configuration"""''
+'''Use arguments to set up parameter accordingly'''
 def parse_args():
 
     desc="TensorFlow implementation of Resnet on Fashion_mnist! author: Hazard Wen"
     parser=argparse.ArgumentParser(description=desc)
-
+    # all the outside arguments can be passed successfully.
+    # Bool data type can be input by keyboard.
     # add dropout or not. Dropout, probability to keep units
     parser.add_argument('--dropout_keep_prob', type=float,
-        help='Keep probability of dropout for the fully connected layer(s).', default=1.0)
-    parser.add_argument('--learning_rate', type=float, help='learning rate', default=0.01)
-    parser.add_argument('--max_epochs', type=int, help='Number of epochs to run.', default=10)
+        help='Keep probability of dropout for the fully connected layer(s).', default=0.8)
+    parser.add_argument('--learning_rate', type=float, help='learning rate', default=0.1)
+    parser.add_argument('--max_epochs', type=int, help='Number of epochs to run.', default=100)
     parser.add_argument('--batch_size', type=int,
-                        help='Number of images to process in a batch.', default=128)
+                        help='Number of images to process in a batch.', default=64)
     parser.add_argument('--activation_function', type=str, choices=['elu', 'relu', 'relu6', 'leaky_relu', 'sigmoid'],
-                        help='which activation function we are going to use', default='relu')
+                        help='which activation function we are going to use', default='None')
     # add argument for data_augmention with bool data type
-    parser.add_argument('--data_augmention', type=str, choices=['True','False'], help='excute data augmention or not',default='False')
+    parser.add_argument('--data_augmention', type=str, choices=['True','False'], help='excute data augmention or not',default='True')
     #******************************************************************************************************************#
     # add arguments for different optimizer
     parser.add_argument('--optimizer', type=str, choices=['ADAGRAD', 'ADADELTA', 'ADAM', 'RMSPROP', 'MOM'],
-        help='The optimization algorithm to use', default='ADAGRAD')
+        help='The optimization algorithm to use', default='None')
     # add argument for batch_normalization or not with bool data type
-    parser.add_argument('--batch_normalization',type=bool,choices=[True,False], help='excute batch_normalization or not',default=True)
+    parser.add_argument('--is_batch_normalization',type=str,choices=['True','False'], help='excute batch_normalization or not',default='True')
 
     return check_args(parser.parse_args())
 
@@ -80,24 +82,31 @@ def main():
     # Loss Function
     cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y_true, logits=score))
 
-    # Optimizer
-    """def optimizer_choose(args.optimizer):
+    # different Optimizer
+    def optimizer_choose(optimizer,learning_rate):
 
         if optimizer == 'ADAGRAD':
             opt = tf.train.AdagradOptimizer(learning_rate)
+            return opt
         elif optimizer == 'ADADELTA':
             opt = tf.train.AdadeltaOptimizer(learning_rate, rho=0.9, epsilon=1e-6)
+            return opt
         elif optimizer == 'ADAM':
-            opt = tf.train.AdamOptimizer(learning_rate, beta1=0.9, beta2=0.999, epsilon=0.1)
+            #opt = tf.train.AdamOptimizer(learning_rate, beta1=0.9, beta2=0.999, epsilon=0.1)
+            opt = tf.train.AdamOptimizer(learning_rate)
+            return opt
         elif optimizer == 'RMSPROP':
             opt = tf.train.RMSPropOptimizer(learning_rate, decay=0.9, momentum=0.9, epsilon=1.0)
+            return opt
         elif optimizer == 'MOM':
             opt = tf.train.MomentumOptimizer(learning_rate, 0.9, use_nesterov=True)
+            return opt
         else:
             raise ValueError('Invalid optimization algorithm')
-    """
-    optimizer = tf.train.AdamOptimizer(learning_rate=args.learning_rate)
-    train = optimizer.minimize(cross_entropy)
+
+    choosed_optimizer= optimizer_choose(args.optimizer,args.learning_rate)
+
+    train = choosed_optimizer.minimize(cross_entropy)
 
     init = tf.global_variables_initializer()
 

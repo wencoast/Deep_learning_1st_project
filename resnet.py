@@ -36,6 +36,7 @@ class resnet(object):
 
 		self.dropout_keep_prob=args.dropout_keep_prob # Keep consistent
 		self.is_batch_normalization=args.is_batch_normalization
+		print('\n The type of self.is_batch_normalization is',type(self.is_batch_normalization))
 		self.activation_function=args.activation_function
 
 		#self.checkpoint_dir = args.checkpoint_dir
@@ -57,21 +58,21 @@ class resnet(object):
 		for shortcut connections """
 
 		for i in range(self.NUM_CONV):
-			resBlock2 = residual_block(self.out, 16, name = 'resBlock2_{}'.format(i + 1), activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
+			resBlock2 = residual_block(self.out, 16, name = 'resBlock2_{}'.format(i + 1), block_activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
 			self.out = resBlock2
 
 		pool2 = max_pool(self.out, name = 'pool2')
 		self.out = pool2
 
 		for i in range(self.NUM_CONV):
-			resBlock3 = residual_block(self.out, 32, name = 'resBlock3_{}'.format(i + 1),activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
+			resBlock3 = residual_block(self.out, 32, name = 'resBlock3_{}'.format(i + 1),block_activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
 			self.out = resBlock3
 
 		pool3 = max_pool(self.out, name = 'pool3')
 		self.out = pool3
 
 		for i in range(self.NUM_CONV):
-			resBlock4 = residual_block(self.out, 64, name = 'resBlock4_{}'.format(i + 1),activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
+			resBlock4 = residual_block(self.out, 64, name = 'resBlock4_{}'.format(i + 1),block_activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
 			self.out = resBlock4
 
 		# Perform global average pooling to make spatial dimensions as 1x1
