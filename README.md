@@ -7,7 +7,7 @@ AlexNet and ResNet performance comparison
   
   <li>python 3.6.7</li>
   <li>Tensorflow 1.12.0</li>
-  <li>keras 2.0.5</li>
+  <li>keras 2.1.6-tf</li>
 
 </ul>
 
@@ -15,7 +15,7 @@ AlexNet and ResNet performance comparison
 
 <ol>
   
-  <li>Comparison of Deep architectures AlexNet and ResNet.[Done!]</li>
+  <li>Comparison of Deep network architectures AlexNet and ResNet.[Done!]</li>
   <li>Using dropout.[Done!]</li>
   <li>Using batch normalization.[Part!]</li>
   <li>Using different activation functions including relu, relu6, leaky_relu, Sigmoid. [Done!] </li>

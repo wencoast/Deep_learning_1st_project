@@ -3,17 +3,17 @@ mnist_fashion = input_data.read_data_sets('../data/fashion', one_hot=True)
 
 import tensorflow as tf
 
+
 import matplotlib
 import matplotlib.pyplot as plt
-
 import numpy as np
+
 import csv
-csvData = []
-csvTest = []
+
 
 
 # Parameters
-learning_rate = 0.000003
+learning_rate = 0.001
 training_iters = 200000
 batch_size = 64
 display_step = 20
@@ -97,79 +97,22 @@ biases = {
     'out': tf.Variable(tf.random_normal([n_classes]))
 }
 
-
+csvTrainAcc = []
+csvTestAcc = []
+csvTestAcc.append(['keep_prob','testAcc'])
 
 plot_y_acc = []
-plot_y_test = []
 
 fig_acc, ax_acc = plt.subplots()
-#fig_loss, ax_loss = plt.subplots()
+
 # Data for plotting
 ax_acc.set(xlabel='step (s)', ylabel='Accuracy', title='Accuracy at each step')
 ax_acc.grid() 
 
-#ax_loss.set(xlabel='step (s)', ylabel='Loss', title='Loss at each step')
-#ax_loss.grid()
-
-csvTest.append(['lr','Momentum'])
-LR_list = [0.0000001, 0.0000005, 0.000001, 0.000005, 0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05]
-for learning_rate in LR_list:
+KP_list = [0.5, 0.8, 0.9, 1.0]
+for dropout in KP_list:
     plot_y_acc.clear()
-    #plot_y_test.clear()
-
     
-
-    # Construct model
-    pred = alex_net(x, weights, biases, keep_prob)
-
-    # Define loss and optimizer
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
-    optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=0.9).minimize(cost)#AdamOptimizer
-
-    # Evaluate model
-    correct_pred = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
-    accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
-
-    # Initializing the variables
-    init = tf.initialize_all_variables()
-    
-    csvData.append(['step', 'lr='+str(learning_rate)])
-    # Launch the graph
-    with tf.Session() as sess:
-        sess.run(init)
-        step = 1
-        # Keep training until reach max iterations
-        while step * batch_size < training_iters:
-            batch_xs, batch_ys = mnist_fashion.train.next_batch(batch_size)
-            # Fit training using batch data
-            sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys, keep_prob: dropout})
-            
-            if step % display_step == 0:
-                # Calculate batch accuracy
-                acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-                # Calculate batch loss
-                loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-                plot_y_acc.append(acc)
-     
-                csvData.append([step, acc])
-                
-                #plot_y_loss.append(loss)
-                print('(lr='+str(learning_rate)+')' + "Iter " + str(step*batch_size) + ", Minibatch Loss= " + "{:.6f}".format(loss) + ", Training Accuracy= " + "{:.5f}".format(acc))
-            step += 1
-        print ("Optimization Finished!")
-        # Calculate accuracy for 256 mnist_fashion test images
-        acc_test = sess.run(accuracy, feed_dict={x: mnist_fashion.test.images[:256], y: mnist_fashion.test.labels[:256], keep_prob: 1.})
-        plot_y_test.append(acc_test)
-        
-        print ("Testing Accuracy:", acc_test)
-        csvTest.append([learning_rate,acc_test])
-        ax_acc.plot(range(int(step/display_step)), plot_y_acc, label='lr='+str(learning_rate))#/display_step
-        #ax_loss.plot(range(int(step/display_step)), plot_y_loss, label='lr='+str(learning_rate))#/display_step
-
-csvTest.append(['lr','Adam'])
-for learning_rate in LR_list:
-    plot_y_acc.clear()
-
     # Construct model
     pred = alex_net(x, weights, biases, keep_prob)
 
@@ -180,14 +123,14 @@ for learning_rate in LR_list:
     # Evaluate model
     correct_pred = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
     accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
-
+    
     # Initializing the variables
     init = tf.initialize_all_variables()
     
-    csvData.append(['step', 'lr='+str(learning_rate)])
+    csvTrainAcc.append(['step(s)','keep_prob='+str(dropout)])
     # Launch the graph
     with tf.Session() as sess:
-        sess.run(init)
+        sess.run(init)   
         step = 1
         # Keep training until reach max iterations
         while step * batch_size < training_iters:
@@ -195,74 +138,56 @@ for learning_rate in LR_list:
             # Fit training using batch data
             sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys, keep_prob: dropout})
             
+            #acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
+            #loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
+           # plot_y_acc.append(acc)
+           # plot_y_loss.append(loss)
             if step % display_step == 0:
                 # Calculate batch accuracy
                 acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
+                plot_y_acc.append(acc)
+                csvTrainAcc.append([step, acc])
                 # Calculate batch loss
                 loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-                plot_y_acc.append(acc)
-     
-                csvData.append([step, acc])
-                
-                #plot_y_loss.append(loss)
-                print('(lr='+str(learning_rate)+')' + "Iter " + str(step*batch_size) + ", Minibatch Loss= " + "{:.6f}".format(loss) + ", Training Accuracy= " + "{:.5f}".format(acc))
+                print('(dropout='+str(dropout)+')' + "Iter " + str(step*batch_size) + ", Minibatch Loss=" + "{:.6f}".format(loss) + ", Training Accuracy=" + "{:.5f}".format(acc))
             step += 1
         print ("Optimization Finished!")
         # Calculate accuracy for 256 mnist_fashion test images
-        acc_test = sess.run(accuracy, feed_dict={x: mnist_fashion.test.images[:256], y: mnist_fashion.test.labels[:256], keep_prob: 1.})
-        plot_y_test.append(acc_test)
+        test_acc = sess.run(accuracy, feed_dict={x: mnist_fashion.test.images[:256], y: mnist_fashion.test.labels[:256], keep_prob: 1.})
+        csvTestAcc.append([dropout, test_acc])
+        print ("Testing Accuracy:", test_acc)
+
         
-        print ("Testing Accuracy:", acc_test)
-        csvTest.append([learning_rate,acc_test])
-        ax_acc.plot(range(int(step/display_step)), plot_y_acc, label='lr='+str(learning_rate))#/display_step
-        #ax_loss.plot(range(int(step/display_step)), plot_y_loss, label='lr='+str(learning_rate))#/display_step
-"""
+        ax_acc.plot(range(int(step/display_step)), plot_y_acc, label='keep_prob='+str(dropout))#/display_step
+        #ax_loss.plot(range(int(step-1)), plot_y_loss, label='keep_prob='+str(dropout))#/display_step
 legend = ax_acc.legend(loc='lower right', shadow=True, fontsize='x-large')    
-#legend = ax_loss.legend(loc='upper right', shadow=True, fontsize='x-large')
-fig_acc.savefig("compare_lr_acc.png")
-#fig_loss.savefig("compare_lr_loss.png")
+#legend = ax_loss.legend(loc='lower right', shadow=True, fontsize='x-large')
+fig_acc.savefig("fig/compare_keep_prob_acc.png")
+#fig_loss.savefig("compare_keep_prob_loss.png")
 plt.show()
-"""
 
 
 
+csvTrainAcc = np.reshape(np.ravel(csvTrainAcc, order='F'), (-1, 2*len(KP_list)), order='F')
 
-
-#csvData = np.reshape(4,-1).T
-csvData = np.reshape(np.ravel(csvData, order='F'), (-1, 4*len(LR_list)), order='F')
-
-with open('fig/lr_optm_train1.csv', 'w') as csvFile:
+with open('fig/dropout_train.csv', 'w') as csvFile:
     writer = csv.writer(csvFile)
-    writer.writerows(csvData)
+    writer.writerows(csvTrainAcc)
 
 csvFile.close()
 
 
-csvTest = np.reshape(np.ravel(csvTest, order='F'), (-1, 4), order='F')
-with open('fig/lr_optm_test1.csv', 'w') as csvFile:
+with open('fig/dropout_test.csv', 'w') as csvFile:
     writer = csv.writer(csvFile)
-    writer.writerows(csvTest)
+    writer.writerows(csvTestAcc)
 
 csvFile.close()
 
-
-"""
 import seaborn as sns
 color_order = ['xkcd:cerulean','xkcd:ocean','xkcd:lightish blue','xkcd:powder blue']
-sns.barplot(x=LR_list, y=plot_y_test, palette=color_order).set_title("Test accuracy with different learning rate")
+sns.barplot(x=KP_list, y=csvTestAcc, palette=color_order).set_title("Test accuracy with different dropout")
 plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.show()
-"""
-
-
-
-
-
-
-
-
-
-
 
 
 
