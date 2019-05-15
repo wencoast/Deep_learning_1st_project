@@ -1,20 +1,35 @@
 # utils for data augmentation 
-
+import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import os
 import random
 from scipy import misc
-
+# Performs random left right(horizontal flipping or not) per batch
+# batch[i] random flip using random.getrandbits() method
 def _random_flip_leftright(batch):
+    
+    print('The shape of batch[i]',np.shape(batch[0]))
+    # if batch_size= 64,i=0,1,2...,63
     for i in range(len(batch)):
+        # python bulit in bool function.
+        # Return a Boolean valuem True or False
+        # random.getrandbits(1) is converted using the standard truth test procedure.
+        # if x is false or omitted, this return False. Otherwise, return True.
         if bool(random.getrandbits(1)):
+            # random.getrandbits return a python long int with k random bits.
+            # Return 1 bit 0/1 this kind random python integer
             batch[i] = np.fliplr(batch[i])
+        # Similar to the following script
+        # def flip(image,random_flip)
+        #     if random_flip and np.random.choice([True,False]):
+        #         image=np.fliplr(image)
+        #     return image
     return batch
 
 def _random_crop(batch, crop_shape, padding=None):
     oshape = np.shape(batch[0])
-
+    print('\n The oshape is :', np.shape(batch[0]))
     if padding:
         oshape = (oshape[0] + 2 * padding, oshape[1] + 2 * padding)
     new_batch = []
@@ -32,8 +47,9 @@ def _random_crop(batch, crop_shape, padding=None):
 
 def data_augmentation(mini_batch,img_size,is_data_augmention='False'):
 
-    if is_data_augmention==True:
+    if is_data_augmention=='True':
 
+        mini_batch=_random_flip_leftright(mini_batch)
         mini_batch=_random_crop(mini_batch,[img_size,img_size],4)
 
     else:
