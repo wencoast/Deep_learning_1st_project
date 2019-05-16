@@ -8,8 +8,11 @@ from scipy import misc
 # Performs random left right(horizontal flipping or not) per batch
 # batch[i] random flip using random.getrandbits() method
 def _random_flip_leftright(batch):
-    
+
+    print('The batch looks like',np.shape(batch))
     print('The shape of batch[i]',np.shape(batch[0]))
+    batch=np.reshape(batch,[-1,28,28,1])
+    # batch=np.expand_dims(batch,axis=-1)
     # if batch_size= 64,i=0,1,2...,63
     for i in range(len(batch)):
         # python bulit in bool function.
@@ -29,7 +32,7 @@ def _random_flip_leftright(batch):
 
 def _random_crop(batch, crop_shape, padding=None):
     oshape = np.shape(batch[0])
-    print('\n The oshape is :', np.shape(batch[0]))
+    # print('\n The oshape is :', np.shape(batch[0]))
     if padding:
         oshape = (oshape[0] + 2 * padding, oshape[1] + 2 * padding)
     new_batch = []
@@ -51,7 +54,7 @@ def data_augmentation(mini_batch,img_size,is_data_augmention='False'):
 
         mini_batch=_random_flip_leftright(mini_batch)
         mini_batch=_random_crop(mini_batch,[img_size,img_size],4)
-
+        mini_batch=np.reshape(mini_batch,[-1,784])
     else:
 
         mini_batch=mini_batch

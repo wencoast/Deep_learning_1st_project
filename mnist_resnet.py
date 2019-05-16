@@ -69,13 +69,18 @@ def main():
 
     # Creating placeholders
     x = tf.placeholder(tf.float32, shape=[None, 784])
+    #
+    print('\n The shape of x placeholder', tf.shape(x))
+    print('\n like x=np.array([1,2]), Here is tensor-like [None,784]')
     y_true = tf.placeholder(tf.float32, shape=[None, 10])
 
     # If one component of shape is the special value -1, the size of that dimension is computed so that the total size remains constant.
     # In particular, a shape of [-1] flattens into 1-D. At most one component of shape can be -1.
     x_image = tf.reshape(x, [-1, 28, 28, 1])
-
+    print('\n The shape of x_image', tf.shape(x_image ))
+    print('\n like x=np.array([none,1,2,3]), Here is tensor-like [None,28,28,1]')
     # Create the ResNet model
+    '''x=x_image means that [none,28,28,1]'''
     model = resnet(args, x=x_image, n=20, num_classes=10) # we are going to use 20 layers.
     score = model.out
 
@@ -121,6 +126,10 @@ def main():
             for i in range(0, 60000, args.batch_size):
                 # mnist.train.next_batch returns a tuple of two arrays
                 batch_x, batch_y = mnist.train.next_batch(args.batch_size)
+                print('The tf.shape of batch_x is', tf.shape(batch_x))
+                print('The np.shape of batch_x is', np.shape(batch_x))
+                print('The type of batch_x is', type(batch_x))
+                '''batch_x looks like ([64,784])'''
                 batch_x=data_augmentation(batch_x,28,is_data_augmention=args.data_augmention)
                 sess.run(train, feed_dict={x: batch_x, y_true: batch_y})
             # Try to add training accuracy here
