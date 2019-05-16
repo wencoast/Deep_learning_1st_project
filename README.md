@@ -15,9 +15,10 @@ AlexNet and ResNet performance comparison
 
 <ol>
   
-  <li>Comparison of Deep network architectures AlexNet and ResNet.[Done!]</li>
+  <li>Comparison of Deep network architectures Simple neural network and ResNet.[Done!]</li>
+  <li>Using Momentum optimizer and Adam optimizer with different learning rate.[Done!]</li>
   <li>Using dropout.[Done!]</li>
-  <li>Using batch normalization.[Done!]</li>
+  <li>Using local response normalization and batch normalization.[Done!]</li>
   <li>Using different activation functions including relu, relu6, leaky_relu, Sigmoid. [Done!] </li>
   <li>Using data augmentation.[Done!]</li>
   <li>Using different optimizers such as ADAGRAD, ADADELTA, ADAM, RMSPROP, MOM. [Done!]</li>
