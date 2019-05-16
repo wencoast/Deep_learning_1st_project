@@ -1,5 +1,5 @@
 # Deep_learning_1st_project
-AlexNet and ResNet performance comparison
+Simple neural network and ResNet performance comparison
 
 ## Running Environment
 
