@@ -4,8 +4,6 @@ mnist_fashion = input_data.read_data_sets('../data/fashion', one_hot=True)
 import tensorflow as tf
 
 
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
 
 import csv
@@ -36,7 +34,8 @@ def max_pool(name, l_input, k):
     return tf.nn.max_pool(l_input, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME', name=name)
 
 def norm(name, l_input, lsize=4):
-    return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)
+    #return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)
+    return tf.layers.batch_normalization(l_input, beta_initializer = tf.constant_initializer(0.0), gamma_initializer = tf.random_normal_initializer(mean = 0.0, stddev = 0.01))#, name=name
 
 def alex_net(_X, _weights, _biases, _dropout):
     # Reshape input picture
@@ -101,17 +100,9 @@ csvTrainAcc = []
 csvTestAcc = []
 csvTestAcc.append(['keep_prob','testAcc'])
 
-plot_y_acc = []
 
-fig_acc, ax_acc = plt.subplots()
-
-# Data for plotting
-ax_acc.set(xlabel='step (s)', ylabel='Accuracy', title='Accuracy at each step')
-ax_acc.grid() 
-
-KP_list = [0.5, 0.8, 0.9, 1.0]
+KP_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 for dropout in KP_list:
-    plot_y_acc.clear()
     
     # Construct model
     pred = alex_net(x, weights, biases, keep_prob)
@@ -137,15 +128,11 @@ for dropout in KP_list:
             batch_xs, batch_ys = mnist_fashion.train.next_batch(batch_size)
             # Fit training using batch data
             sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys, keep_prob: dropout})
-            
-            #acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-            #loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-           # plot_y_acc.append(acc)
-           # plot_y_loss.append(loss)
+
             if step % display_step == 0:
                 # Calculate batch accuracy
                 acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-                plot_y_acc.append(acc)
+                
                 csvTrainAcc.append([step, acc])
                 # Calculate batch loss
                 loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
@@ -157,39 +144,21 @@ for dropout in KP_list:
         csvTestAcc.append([dropout, test_acc])
         print ("Testing Accuracy:", test_acc)
 
-        
-        ax_acc.plot(range(int(step/display_step)), plot_y_acc, label='keep_prob='+str(dropout))#/display_step
-        #ax_loss.plot(range(int(step-1)), plot_y_loss, label='keep_prob='+str(dropout))#/display_step
-legend = ax_acc.legend(loc='lower right', shadow=True, fontsize='x-large')    
-#legend = ax_loss.legend(loc='lower right', shadow=True, fontsize='x-large')
-fig_acc.savefig("fig/compare_keep_prob_acc.png")
-#fig_loss.savefig("compare_keep_prob_loss.png")
-plt.show()
 
-
-
-csvTrainAcc = np.reshape(np.ravel(csvTrainAcc, order='F'), (-1, 2*len(KP_list)), order='F')
-
-with open('fig/dropout_train.csv', 'w') as csvFile:
-    writer = csv.writer(csvFile)
-    writer.writerows(csvTrainAcc)
-
-csvFile.close()
-
-
-with open('fig/dropout_test.csv', 'w') as csvFile:
+with open('fig/dropout_testing1.csv', 'w') as csvFile:
     writer = csv.writer(csvFile)
     writer.writerows(csvTestAcc)
 
 csvFile.close()
 
-import seaborn as sns
-color_order = ['xkcd:cerulean','xkcd:ocean','xkcd:lightish blue','xkcd:powder blue']
-sns.barplot(x=KP_list, y=csvTestAcc, palette=color_order).set_title("Test accuracy with different dropout")
-plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
-plt.show()
 
+csvTrainAcc = np.reshape(np.ravel(csvTrainAcc, order='F'), (-1, 2*len(KP_list)), order='F')
 
+with open('fig/dropout_training1.csv', 'w') as csvFile:
+    writer = csv.writer(csvFile)
+    writer.writerows(csvTrainAcc)
+
+csvFile.close()
 
 
 

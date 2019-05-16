@@ -6,7 +6,7 @@ import tensorflow as tf
 
 
 # Parameters
-learning_rate = 0.000001#0.001
+learning_rate = 0.000001#0.001#
 training_iters = 200000
 batch_size = 64
 display_step = 20
@@ -30,7 +30,9 @@ def max_pool(name, l_input, k):
 
 def norm(name, l_input, lsize=4):
     #return tf.nn.lrn(l_input, lsize, bias=1.0, alpha=0.001 / 9.0, beta=0.75, name=name)	#local response normalization
-    return tf.layers.batch_normalization(l_input, name=name)	#batch normalization
+    #return tf.layers.batch_normalization(l_input, name=name)	#batch normalization
+    return tf.layers.batch_normalization(l_input, beta_initializer = tf.constant_initializer(0.0),	#axis = 1, 
+			gamma_initializer = tf.random_normal_initializer(mean = 0.0, stddev = 0.01), name=name)
     #return l_input	#without normalization
 
 def alex_net(_X, _weights, _biases, _dropout):
