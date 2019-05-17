@@ -1,0 +1,23 @@
+python mnist_resnet.py --dropout_keep_prob 0.8 --learning_rate 0.01 --max_epochs 20 --batch_size 128 --activation_function relu --data_augmentation True --optimizer ADAM --is_batch_normalization True
+
+python mnist_resnet.py --dropout_keep_prob 0.8 --learning_rate 0.01 --max_epochs 20 --batch_size 128 --activation_function relu --data_augmentation False --optimizer ADAM --is_batch_normalization True
+
+Relu 
+
+python mnist_resnet.py --dropout_keep_prob 0.8 --learning_rate 0.01 --max_epochs 20 --batch_size 128 --activation_function relu --data_augmentation False --optimizer ADAM --is_batch_normalization True
+
+Sigmoid 
+
+python mnist_resnet.py --dropout_keep_prob 0.8 --learning_rate 0.01 --max_epochs 20 --batch_size 128 --activation_function sigmoid --data_augmentation False --optimizer ADAM --is_batch_normalization True
+
+Leaky relu
+
+python mnist_resnet.py --dropout_keep_prob 0.8 --learning_rate 0.01 --max_epochs 20 --batch_size 128 --activation_function leaky_relu --data_augmentation False --optimizer ADAM --is_batch_normalization True
+
+tanh
+
+python mnist_resnet.py --dropout_keep_prob 0.8 --learning_rate 0.01 --max_epochs 20 --batch_size 128 --activation_function tanh --data_augmentation False --optimizer ADAM --is_batch_normalization True
+
+optimal
+
+python mnist_resnet.py --dropout_keep_prob 0.8 --learning_rate 0.01 --max_epochs 50 --batch_size 128 --activation_function relu --data_augmentation False --optimizer ADAM --is_batch_normalization True
