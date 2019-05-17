@@ -12,9 +12,9 @@ import csv
 
 # Parameters
 learning_rate = 0.001
-training_iters = 200000
+training_iters = 10000000
 batch_size = 64
-display_step = 20
+display_step = 1000
 
 # Network Parameters
 n_input = 784 # mnist_fashion data input (img shape: 28*28)
@@ -98,10 +98,10 @@ biases = {
 
 csvTrainAcc = []
 csvTestAcc = []
-csvTestAcc.append(['keep_prob','testAcc'])
+#csvTestAcc.append(['keep_prob','testAcc'])
 
 
-KP_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+KP_list = [0.5, 0.8, 1.0]#
 for dropout in KP_list:
     
     # Construct model
@@ -119,6 +119,7 @@ for dropout in KP_list:
     init = tf.initialize_all_variables()
     
     csvTrainAcc.append(['step(s)','keep_prob='+str(dropout)])
+    csvTestAcc.append(['step(s)','keep_prob='+str(dropout)])
     # Launch the graph
     with tf.Session() as sess:
         sess.run(init)   
@@ -132,20 +133,25 @@ for dropout in KP_list:
             if step % display_step == 0:
                 # Calculate batch accuracy
                 acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-                
-                csvTrainAcc.append([step, acc])
                 # Calculate batch loss
                 loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
+                csvTrainAcc.append([step, acc])
                 print('(dropout='+str(dropout)+')' + "Iter " + str(step*batch_size) + ", Minibatch Loss=" + "{:.6f}".format(loss) + ", Training Accuracy=" + "{:.5f}".format(acc))
+
+                test_acc = sess.run(accuracy, feed_dict={x: mnist_fashion.test.images[:256], y: mnist_fashion.test.labels[:256], keep_prob: 1.})
+                #test_loss = sess.run(cost, feed_dict={x: mnist_fashion.test.images[:256], y: mnist_fashion.test.labels[:256], keep_prob: 1.})
+                csvTestAcc.append([step, test_acc])
+        
             step += 1
         print ("Optimization Finished!")
         # Calculate accuracy for 256 mnist_fashion test images
-        test_acc = sess.run(accuracy, feed_dict={x: mnist_fashion.test.images[:256], y: mnist_fashion.test.labels[:256], keep_prob: 1.})
-        csvTestAcc.append([dropout, test_acc])
+        test_acc = sess.run(accuracy, feed_dict={x: mnist_fashion.test.images[:5000], y: mnist_fashion.test.labels[:5000], keep_prob: 1.})
+        #csvTestAcc.append([dropout, test_acc])
         print ("Testing Accuracy:", test_acc)
 
 
-with open('fig/dropout_testing1.csv', 'w') as csvFile:
+csvTestAcc = np.reshape(np.ravel(csvTestAcc, order='F'), (-1, 2*len(KP_list)), order='F')
+with open('fig/dropout_testing_acc.csv', 'w') as csvFile:
     writer = csv.writer(csvFile)
     writer.writerows(csvTestAcc)
 
@@ -154,7 +160,7 @@ csvFile.close()
 
 csvTrainAcc = np.reshape(np.ravel(csvTrainAcc, order='F'), (-1, 2*len(KP_list)), order='F')
 
-with open('fig/dropout_training1.csv', 'w') as csvFile:
+with open('fig/dropout_training_acc.csv', 'w') as csvFile:
     writer = csv.writer(csvFile)
     writer.writerows(csvTrainAcc)
 
