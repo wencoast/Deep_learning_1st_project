@@ -11,6 +11,16 @@ Simple neural network and ResNet performance comparison
 
 </ul>
 
+## Running the Code for SNN
+
+| Path          | Function      |
+| ------------- |---------------|
+| SNN/snn_fashion_mnist.py | The original structure and hyperparameters |
+| SNN/snn_fashion_mnist_lr_optimizer.py | Compare Momentum and Adam with different learning rates |
+| SNN/snn_fashion_mnist_dropout.py | Compare different dropout rates |
+| SNN/snn_fashion_mnist_optimal.py|           The final model with optimal settings|
+
+
 ## TODO List
 
 <ol>
