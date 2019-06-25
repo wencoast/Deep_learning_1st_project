@@ -27,7 +27,7 @@ def parse_args():
     parser.add_argument('--max_epochs', type=int, help='Number of epochs to run.', default=100)
     parser.add_argument('--batch_size', type=int,
                         help='Number of images to process in a batch.', default=64)
-    parser.add_argument('--activation_function', type=str, choices=['elu', 'relu', 'relu6', 'leaky_relu', 'sigmoid','tanh'],
+    parser.add_argument('--activation_function', type=str, choices=['elu', 'relu', 'relu6', 'leaky_relu', 'sigmoid', 'tanh', 'linear'],
                         help='which activation function we are going to use', default='None')
     # add argument for data_augmentation with bool data type
     parser.add_argument('--data_augmentation', type=str, choices=['True','False'], help='excute data augmentation or not',default='False')
@@ -77,10 +77,12 @@ def main():
     # If one component of shape is the special value -1, the size of that dimension is computed so that the total size remains constant.
     # In particular, a shape of [-1] flattens into 1-D. At most one component of shape can be -1.
     x_image = tf.reshape(x, [-1, 28, 28, 1])
-    print('\n The shape of x_image', tf.shape(x_image ))
+    print('\n The shape of x_image is', tf.shape(x_image ))
     print('\n like x=np.array([none,1,2,3]), Here is tensor-like [None,28,28,1]')
     # Create the ResNet model
     '''x=x_image means that [none,28,28,1]'''
+    # The instance name should be model.
+    # The class name shoulde be Resnet, uppercase should be better.
     model = resnet(args, x=x_image, n=20, num_classes=10) # we are going to use 20 layers.
     score = model.out
 
