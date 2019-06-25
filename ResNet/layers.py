@@ -6,6 +6,8 @@ def conv_layer(x, filter_height, filter_width,
 	"""Create a convolution layer."""
 	
 	# Get number of input channels
+	print('How the x.get_shape() looks like', x.get_shape())
+	# What's the difference between tf.shape and onetensor.get_shape.
 	input_channels = int(x.get_shape()[-1])
 
 	with tf.variable_scope(name) as scope:
@@ -22,11 +24,12 @@ def conv_layer(x, filter_height, filter_width,
 		z = tf.nn.bias_add(conv, b)
 
 		# Perform batch normalization
+		# Batch norm does not change the shape of tensor.
 		if is_batch_normalization=='True':
 			batch_norm = tf.layers.batch_normalization(z, axis = 1, beta_initializer = tf.constant_initializer(0.0),
 			gamma_initializer = tf.random_normal_initializer(mean = 0.0, stddev = 0.01))
 			print('This is already excuted batch_normalization.')
-			return batch_norm
+			#return batch_norm
 		else:
 			print('This is a network model without batch_normlization.')
 			batch_norm=z
@@ -62,7 +65,7 @@ def conv_layer(x, filter_height, filter_width,
 			tanh_out=tf.nn.tanh(batch_norm,name=None)
 			return tanh_out
 		else:
-			print('\n Keep linear output without using non-linear activation function')
+			print('Keep linear output without using non-linear activation \n')
 			return batch_norm
 
 
