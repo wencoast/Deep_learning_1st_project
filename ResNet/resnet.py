@@ -19,18 +19,23 @@ from residual import residual_block
 class resnet(object):
 
 	""" Implementation of ResNet Architecture """
-
+	# Here __init__ is the python constructor function.
 	def __init__(self, args, x, n, num_classes):
 
 		""" ResNet-n architecture
 		{20:3, 32:5, 44:7, 56:9}
 		"""
-
-		if((n < 20) or ((n - 20) % 6 != 0)):
+		# In terminal python, 0%6=0
+		if((n < 20) or ((n - 20) % 6 != 0)): # if n=101, unavailable. # If n=100, unavailable. if 100, 80%6=2 !=0 thus unavailable.
+                                                     # if n=110,avaiable. 90%6=0
 			print("ResNet DEPTH INVALID!\n")
 			return
-
+		# In python 3, 0/6=0.0.
 		self.NUM_CONV = int(((n - 20) / 6) + 3) # For n = 20, each block will have 3 residual units.
+												# However, in He et al. original paper each block has different number of residual units.
+												# But no matter how many layers totally, both of them have the same number of block.
+												# The number of block should be 4. Totally same, including conv2_x, conv3_x, conv4_x, conv5_x.  Inside block, the feature map dimension
+												# does not change.
 		self.X = x
 		self.NUM_CLASSES = num_classes
 
@@ -40,6 +45,8 @@ class resnet(object):
 		self.activation_function=args.activation_function
 		print('\n The type of self.activation_function is', type(self.activation_function))
 		print('\n The value of self.activation_function is',self.activation_function)
+		
+		print('\n')
 		#self.checkpoint_dir = args.checkpoint_dir
 		#self.log_dir = args.log_dir
 
@@ -51,22 +58,27 @@ class resnet(object):
 		self.create(self.dropout_keep_prob,is_training=True)
 
 	def create(self,dropout_keep_prob,is_training=True):
-		# 1 layer
+		# 1 layer first 3 means filter_height, second 3 means filter_width. default 1 as stride.  
+		# conv1(x,filter_height,filter_width, num_filters, name, stride=1, padding='SAME')
 		conv1 = conv_layer(self.X, 3, 3, 16, name = 'conv1',activation_function=self.activation_function,is_batch_normalization=self.is_batch_normalization)
 		self.out = conv1
-
-		""" All residual blocks use zer-padding
-		for shortcut connections """
-		# i=0,1,2 every block has 2 conv layer.
+		""" All residual blocks use zero-padding for shortcut connections """
+        # No matter how deep the network it is, just be divided into 4-5 Big Block.
+        # Every Block can be divided into Block1_1(Block1_ResUnit1), Block1_2(Block1_ResUnit2), Block1_3(Block1_ResUnit3) again.
+		# Then every Block1_1 is already residual unit.
+		# Every resiudal unit has 2 conv layer.
 		# one for loop has 6 conv layer.
-		for i in range(self.NUM_CONV):
+		# residual_block should be changed into residual_unit.
+		for i in range(self.NUM_CONV): # i=0,1,2.
+		# It seems that every Block has 3 Residual Unit(block with lowercase).
 			resBlock2 = residual_block(self.out, 16, name = 'resBlock2_{}'.format(i + 1), block_activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
 			self.out = resBlock2
 		# 1 max_pool layer
 		pool2 = max_pool(self.out, name = 'pool2')
 		self.out = pool2
-		# i=0,1,2 every block has 2 conv layer.
-		# one for loop has 6 conv layer.
+		# It is different from original paper. In original paper, there has no pool operation in the middle layer.
+		# Every ResUnit has 2 conv layer.
+		# Every Block has 3 Residual Unit(block with lowercase).
 		for i in range(self.NUM_CONV):
 			resBlock3 = residual_block(self.out, 32, name = 'resBlock3_{}'.format(i + 1),block_activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
 			self.out = resBlock3
@@ -75,6 +87,7 @@ class resnet(object):
 		self.out = pool3
 		# i=0,1,2 every block has 2 conv layer.
 		# one for loop has 6 conv layer.
+		# Every Block has 3 Residual Unit(block with lowercase).
 		for i in range(self.NUM_CONV):
 			resBlock4 = residual_block(self.out, 64, name = 'resBlock4_{}'.format(i + 1),block_activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
 			self.out = resBlock4
