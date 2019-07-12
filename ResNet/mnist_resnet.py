@@ -32,6 +32,7 @@ def parse_args():
     # add argument for data_augmentation with bool data type
     parser.add_argument('--data_augmentation', type=str, choices=['True','False'], help='excute data augmentation or not',default='False')
     #******************************************************************************************************************#
+    # Be careful on spell when you type flag outside, otherwise it will occur error: unrecognized arguments: --data_augmention True
     # add arguments for different optimizer
     parser.add_argument('--optimizer', type=str, choices=['ADAGRAD', 'ADADELTA', 'ADAM', 'RMSPROP', 'MOM'],
         help='The optimization algorithm to use', default='None')
