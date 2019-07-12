@@ -26,7 +26,7 @@ class resnet(object):
 		{20:3, 32:5, 44:7, 56:9}
 		"""
 		# In terminal python, 0%6=0
-		if((n < 20) or ((n - 20) % 6 != 0)): # if n=101, unavailable. # If n=100, unavailable. if 100, 80%6=2 !=0 thus unavailable.
+		if((n < 20) or ((n - 20) % 6 != 0)): ### if n=101, unavailable. # If n=100, unavailable. if 100, 80%6=2 !=0 thus unavailable.
                                                      # if n=110,avaiable. 90%6=0
 			print("ResNet DEPTH INVALID!\n")
 			return
@@ -60,7 +60,7 @@ class resnet(object):
 	def create(self,dropout_keep_prob,is_training=True):
 		# 1 layer first 3 means filter_height, second 3 means filter_width. default 1 as stride.  
 		# conv1(x,filter_height,filter_width, num_filters, name, stride=1, padding='SAME')
-		conv1 = conv_layer(self.X, 3, 3, 16, name = 'conv1',activation_function=self.activation_function,is_batch_normalization=self.is_batch_normalization)
+		conv1 = conv_layer(self.X, 3, 3, 16, name = 'conv1', activation_function=self.activation_function, is_batch_normalization=self.is_batch_normalization)
 		self.out = conv1
 		""" All residual blocks use zero-padding for shortcut connections """
         # No matter how deep the network it is, just be divided into 4-5 Big Block.

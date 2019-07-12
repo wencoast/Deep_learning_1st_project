@@ -2,9 +2,9 @@ import tensorflow as tf
 
 from layers import conv_layer
 
-def residual_block(x, out_channels, projection = False, name = 'residual',block_activation_function='relu',block_is_batch_normalization='True'):
+def residual_block(x, out_channels, projection = False, name = 'residual', block_activation_function='relu', block_is_batch_normalization='True'):
 
-	"""Create a Residual Block with two conv layers"""
+	"""Create a Residual Block consisting of 3 Residual Unit with two conv layers"""
 
 	# Get the input channels
 	input_channels = int(x.get_shape()[-1])

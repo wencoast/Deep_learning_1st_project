@@ -30,7 +30,7 @@ def parse_args():
     parser.add_argument('--activation_function', type=str, choices=['elu', 'relu', 'relu6', 'leaky_relu', 'sigmoid', 'tanh', 'linear'],
                         help='which activation function we are going to use', default='None')
     # add argument for data_augmentation with bool data type
-    parser.add_argument('--data_augmentation', type=str, choices=['True','False'], help='excute data augmentation or not',default='False')
+    parser.add_argument('--data_augmentation', type=str, choices=['True','False'], help='excute data augmentation or not', default='False')
     #******************************************************************************************************************#
     # add arguments for different optimizer
     parser.add_argument('--optimizer', type=str, choices=['ADAGRAD', 'ADADELTA', 'ADAM', 'RMSPROP', 'MOM'],
@@ -70,7 +70,9 @@ def main():
     # Creating placeholders
     x = tf.placeholder(tf.float32, shape=[None, 784])
     #
-    print('\n The shape of x placeholder', tf.shape(x))
+    print('\n The shape of x placeholder is', tf.shape(x))
+    array_1 = np.array([1,2])
+    print('\n The shape of array_1 is', tf.shape(array_1))
     print('\n like x=np.array([1,2]), Here is tensor-like [None,784]')
     y_true = tf.placeholder(tf.float32, shape=[None, 10])
 
