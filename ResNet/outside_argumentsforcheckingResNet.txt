@@ -8,7 +8,7 @@
 128
 --activation_function
 relu
---data_augmentation
+--data_augmention
 False
 --optimizer
 ADAM
