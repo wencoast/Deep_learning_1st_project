@@ -19,7 +19,25 @@ def parse_args():
     desc="TensorFlow implementation of Resnet on Fashion_mnist! author: Hazard Wen"
     parser=argparse.ArgumentParser(description=desc)
     # all the outside arguments can be passed successfully.
-    # Bool data type can be input by keyboard.
+    # Bool data type can not be input by keyboard.
+    '''
+
+	In Deep_learning_prac2, we define one function to convert keyboard input into boolean.
+
+	def str2bool(v):
+		if isinstance(v, bool):
+			return v
+		if v.lower() in ('yes', 'true', 't', 'y', '1'):
+			return True
+		elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+			return False
+		else:
+		raise argparse.ArgumentTypeError('Boolean value expected.')
+
+	'''
+    '''
+	check if is newest!!!
+	'''
     # add dropout or not. Dropout, probability to keep units
     parser.add_argument('--dropout_keep_prob', type=float,
         help='Keep probability of dropout for the fully connected layer(s).', default=0.8)
