@@ -1,0 +1,16 @@
+--dropout_keep_prob
+0.8
+--learning_rate
+0.01
+--max_epochs
+1
+--batch_size
+128
+--activation_function
+relu
+--data_augmentation
+False
+--optimizer
+ADAM
+--is_batch_normalization
+True
