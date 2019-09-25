@@ -21,16 +21,17 @@ class resnet(object):
 	""" Implementation of ResNet Architecture """
 	# Here __init__ is the python constructor function.
 	def __init__(self, args, x, n, num_classes):
-
+	# 20 means that ResNet-20
 		""" ResNet-n architecture
 		{20:3, 32:5, 44:7, 56:9}
 		"""
-		# In terminal python, 0%6=0
+		# In terminal python, 0%6=0 The 0 means valid.
 		if((n < 20) or ((n - 20) % 6 != 0)): ### if n=101, unavailable. # If n=100, unavailable. if 100, 80%6=2 !=0 thus unavailable.
                                                      # if n=110,avaiable. 90%6=0
 			print("ResNet DEPTH INVALID!\n")
 			return
 		# In python 3, 0/6=0.0.
+		# So NUM_CONV =3 here.
 		self.NUM_CONV = int(((n - 20) / 6) + 3) # For n = 20, each block will have 3 residual units.
 												# However, in He et al. original paper each block has different number of residual units.
 												# But no matter how many layers totally, both of them have the same number of block.
@@ -79,7 +80,7 @@ class resnet(object):
 		# It is different from original paper. In original paper, there has no pool operation in the middle layer.
 		# Every ResUnit has 2 conv layer.
 		# Every Block has 3 Residual Unit(block with lowercase).
-		for i in range(self.NUM_CONV):
+		for i in range(self.NUM_CONV): # Starting from here, the number of channel starts to change. Here is 16 to 32.
 			resBlock3 = residual_block(self.out, 32, name = 'resBlock3_{}'.format(i + 1),block_activation_function=self.activation_function,block_is_batch_normalization=self.is_batch_normalization)
 			self.out = resBlock3
 		# 1 max_pool layer

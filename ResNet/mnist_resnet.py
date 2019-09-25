@@ -2,24 +2,26 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from tensorflow import contrib
 from tensorflow import keras
 import tensorflow as tf
 import numpy as np
 from ops import *
 from resnet import resnet
-import matplotlib.pyplot as plt
+
+# The later one could be function and class type.
 
 import argparse
 
 """parsing and configuration"""''
 '''Use arguments to set up parameter accordingly'''
+
 def parse_args():
 
     desc="TensorFlow implementation of Resnet on Fashion_mnist! author: Hazard Wen"
     parser=argparse.ArgumentParser(description=desc)
     # all the outside arguments can be passed successfully.
     # Bool data type can not be input by keyboard.
+    
     '''
 
 	In Deep_learning_prac2, we define one function to convert keyboard input into boolean.
@@ -35,8 +37,11 @@ def parse_args():
 		raise argparse.ArgumentTypeError('Boolean value expected.')
 
 	'''
+    
     '''
+	
 	check if is newest!!!
+	
 	'''
     # add dropout or not. Dropout, probability to keep units
     parser.add_argument('--dropout_keep_prob', type=float,
@@ -50,7 +55,7 @@ def parse_args():
     # add argument for data_augmentation with bool data type
     parser.add_argument('--data_augmentation', type=str, choices=['True','False'], help='excute data augmentation or not', default='False')
     #******************************************************************************************************************#
-    # Be careful on spell when you type flag outside, otherwise it will occur one error
+    # Be careful on spelling when you type flag outside, otherwise it will occur one error.
     # error: unrecognized arguments: --data_augmention True
     # add arguments for different optimizer
     parser.add_argument('--optimizer', type=str, choices=['ADAGRAD', 'ADADELTA', 'ADAM', 'RMSPROP', 'MOM'],
@@ -74,8 +79,9 @@ def main():
     print('The version of keras:', keras.__version__)
 
     # specific parse arguments
+    #args=parse_args()
+    #args=parser.parse_args()
     args=parse_args()
-
     if args is None:
         exit()
 
@@ -88,12 +94,19 @@ def main():
     mnist = input_data.read_data_sets('data/fashion', one_hot=True)
 
     # Creating placeholders
+    # Explore the format of the dataset before training the model.
+    # The following shows there are 60,000 images in the training set,
+    # with each image represented as 28 x 28 (784) pixels
+    # train_images.shape = (60000, 28, 28)
+    # Likewise, there are 60,000 labels in the training set
+    # len(train_labels) = 60000
     x = tf.placeholder(tf.float32, shape=[None, 784])
     #
     print('\n The shape of x placeholder is', tf.shape(x))
     array_1 = np.array([1,2])
     print('\n The shape of array_1 is', tf.shape(array_1))
     print('\n like x=np.array([1,2]), Here is tensor-like [None,784]')
+    # They seems that they are different.
     y_true = tf.placeholder(tf.float32, shape=[None, 10])
 
     # If one component of shape is the special value -1, the size of that dimension is computed so that the total size remains constant.
