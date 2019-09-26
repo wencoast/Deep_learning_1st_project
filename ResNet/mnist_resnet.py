@@ -19,6 +19,8 @@ def parse_args():
 
     desc="TensorFlow implementation of Resnet on Fashion_mnist! author: Hazard Wen"
     parser=argparse.ArgumentParser(description=desc)
+    # How to confirm whether this desc works well or not.
+    
     # all the outside arguments can be passed successfully.
     # Bool data type can not be input by keyboard.
     
@@ -62,7 +64,9 @@ def parse_args():
         help='The optimization algorithm to use', default='None')
     # add argument for batch_normalization or not with bool data type
     parser.add_argument('--is_batch_normalization',type=str,choices=['True','False'], help='excute batch_normalization or not',default='False')
-
+    
+    # The following one without check_args is also correct.
+    # return parser.parse_args()
     return check_args(parser.parse_args())
 
 def check_args(args):
