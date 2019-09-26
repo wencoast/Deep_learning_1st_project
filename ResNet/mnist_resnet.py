@@ -15,8 +15,9 @@ import argparse
 """parsing and configuration"""''
 '''Use arguments to set up parameter accordingly'''
 
-def parse_args():
-
+# def parse_args():
+def parse_flags():
+    
     desc="TensorFlow implementation of Resnet on Fashion_mnist! author: Hazard Wen"
     parser=argparse.ArgumentParser(description=desc)
     # How to confirm whether this desc works well or not.
@@ -85,7 +86,7 @@ def main():
     # specific parse arguments
     #args=parse_args()
     #args=parser.parse_args()
-    args=parse_args()
+    args=parse_flags()
     if args is None:
         exit()
 
