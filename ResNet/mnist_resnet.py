@@ -117,6 +117,7 @@ def main():
     # If one component of shape is the special value -1, the size of that dimension is computed so that the total size remains constant.
     # In particular, a shape of [-1] flattens into 1-D. At most one component of shape can be -1.
     x_image = tf.reshape(x, [-1, 28, 28, 1])
+    x_image = tf.identity(x_image,'input')
     print('\n The shape of x_image is', tf.shape(x_image ))
     print('\n like x=np.array([none,1,2,3]), Here is tensor-like [None,28,28,1]')
     # Create the ResNet model
@@ -172,7 +173,7 @@ def main():
                 #print('The np.shape of batch_x is', np.shape(batch_x))
                 #print('The type of batch_x is', type(batch_x))
                 '''batch_x looks like ([64,784])'''
-                batch_x=data_augmentation(batch_x,28,is_data_augmentation=args.data_augmentation)
+                batch_x=data_augmentation(batch_x, 28, is_data_augmentation=args.data_augmentation)
                 # perform minimize loss per batch
                 sess.run(train, feed_dict={x: batch_x, y_true: batch_y})
             # Try to add training loss
