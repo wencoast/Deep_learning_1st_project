@@ -156,9 +156,9 @@ def main():
         else:
             raise ValueError('Invalid optimization algorithm')
 
-    choosed_optimizer= optimizer_choose(args.optimizer,args.learning_rate)
+    choosed_optimizer_opt= optimizer_choose(args.optimizer,args.learning_rate)
 
-    train = choosed_optimizer.minimize(training_loss)
+    train = choosed_optimizer_opt.minimize(training_loss)
 
     init = tf.global_variables_initializer()
 
