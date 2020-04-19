@@ -128,7 +128,7 @@ def main():
     score = model.out
 
     # using pre-defined function to get training loss and training accuracy
-    training_loss,accuracy=classification_loss(score,y_true)
+    training_loss, accuracy=classification_loss(score,y_true)
 
     # define reg loss
     # reg_loss = tf.losses.get_regularization_loss()
