@@ -9,19 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            // "args": ["--optimizer", "MOM","--activation_function", "relu",],
-            // "args": ["--optimizer", "MOM", ], It does not work
-            "args": ["--optimizer", "MOM", ],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            // "args": ["--optimizer", "MOM", "--activation_function", "relu"],
-            // "args": ["--optimizer", "MOM", "--activation_function", "relu",],
-            // "args": ["--optimizer", "MOM",],
+            "args" : ["--optimizer","ADAM", "--activation_function", "relu"],
             "console": "integratedTerminal"
         }
     ]
